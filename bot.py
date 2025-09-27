@@ -4,14 +4,20 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from dotenv import load_dotenv
 import aiohttp
 
-# Загружаем токены из .env
-load_dotenv()
-BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
+# Загружаем токены из .env (если файл есть локально)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
+# Берём токен из переменных окружения
+BOT_TOKEN = os.getenv("BOT_TOKEN") or os.getenv("TG_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Проверяем, что токен есть
 if not BOT_TOKEN:
-    raise ValueError("❌ Нет токена! Проверьте файл .env")
+    raise ValueError("❌ Нет токена! Укажи BOT_TOKEN (или TG_BOT_TOKEN) в Render → Environment")
+
 
 dp = Dispatcher()
 bot = Bot(BOT_TOKEN)
